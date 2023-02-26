@@ -36,12 +36,10 @@ client.on("messageCreate", async (msg) => {
     if (msg.content.startsWith(">eval")) {
         let code = msg.content.slice(6)
         if (!code) {
-            msg.channel.send("❌ Provide a code to evaluate it")
-            return
+            return msg.channel.send("❌ Provide a code to evaluate it")
         }
         if (msg.author.id != "604339998312890379") {
-            msg.channel.send("❌ You can't do this")
-            return
+            return msg.channel.send("❌ You can't do this")
         }
         else {
             try {
@@ -52,7 +50,7 @@ client.on("messageCreate", async (msg) => {
                     .addFields(
                         { name: "Input", value: "```js" + "\n" + code + "\n" + "```", inline: false },
                         { name: "Output", value: "```js" + "\n" + codeval + "\n" + "```", inline: false })
-                msg.channel.send({ embeds: [evalembed] })
+                await msg.channel.send({ embeds: [evalembed] })
             }
             catch (error) {
                 let evalerrorembed = new EmbedBuilder()
@@ -61,7 +59,7 @@ client.on("messageCreate", async (msg) => {
                     .addFields(
                         { name: "Input", value: "```js" + "\n" + code + "\n" + "```", inline: false },
                         { name: "Output", value: "```js" + "\n" + error + "\n" + "```", inline: false })
-                msg.channel.send({ embeds: [evalerrorembed] })
+                await msg.channel.send({ embeds: [evalerrorembed] })
             }
         }
     }
@@ -124,11 +122,13 @@ client.on("interactionCreate", /** @param { import("discord.js").ChatInputComman
         await i.reply({ embeds: [languagesembed], components: [row], ephemeral: true })
     }
     else if (i.commandName === "invite") {
-        let inviteembed = new EmbedBuilder()
-            .setColor("#607387")
-            .setAuthor({ name: i.user.username, iconURL: i.user.avatarURL() })
-            .setTitle("https://discord.com/api/oauth2/authorize?client_id=1076200668810985634&permissions=274877975552&scope=bot%20applications.commands")
-        await i.reply({ embeds: [inviteembed], ephemeral: true })
+        let invite = new ButtonBuilder()
+            .setStyle(ButtonStyle.Link)
+            .setLabel("Invite")
+            .setURL("https://discord.com/api/oauth2/authorize?client_id=1076200668810985634&permissions=274877975552&scope=applications.commands%20bot")
+        let row = new ActionRowBuilder()
+            .addComponents(invite)
+        await i.reply({ components: [row], ephemeral: true })
     }
 })
 client.on("interactionCreate", /** @param { import("discord.js").ButtonInteraction } i */ async (i) => {
@@ -177,7 +177,7 @@ client.on("interactionCreate", /** @param { import("discord.js").ButtonInteracti
             .setStyle(ButtonStyle.Primary)
         let row = new ActionRowBuilder()
             .addComponents(previous, next)
-        i.update({ embeds: [languagesembed], components: [row], ephemeral: true })
+        await i.update({ embeds: [languagesembed], components: [row], ephemeral: true })
     }
     else if (i.customId === "previous2") {
         let languages = []
@@ -201,7 +201,7 @@ client.on("interactionCreate", /** @param { import("discord.js").ButtonInteracti
             .setStyle(ButtonStyle.Primary)
         let row = new ActionRowBuilder()
             .addComponents(previous, next)
-        i.update({ embeds: [languagesembed], components: [row], ephemeral: true })
+        await i.update({ embeds: [languagesembed], components: [row], ephemeral: true })
     }
     else if (i.customId === "next3") {
         let languages = []
@@ -225,7 +225,7 @@ client.on("interactionCreate", /** @param { import("discord.js").ButtonInteracti
             .setStyle(ButtonStyle.Primary)
         let row = new ActionRowBuilder()
             .addComponents(previous, next)
-        i.update({ embeds: [languagesembed], components: [row], ephemeral: true })
+        await i.update({ embeds: [languagesembed], components: [row], ephemeral: true })
     }
     else if (i.customId === "previous3") {
         let languages = []
@@ -248,7 +248,7 @@ client.on("interactionCreate", /** @param { import("discord.js").ButtonInteracti
             .setStyle(ButtonStyle.Primary)
         let row = new ActionRowBuilder()
             .addComponents(previous, next)
-        i.update({ embeds: [languagesembed], components: [row], ephemeral: true })
+        await i.update({ embeds: [languagesembed], components: [row], ephemeral: true })
     }
     else if (i.customId === "previous4") {
         let languages = []
@@ -271,11 +271,11 @@ client.on("interactionCreate", /** @param { import("discord.js").ButtonInteracti
             .setStyle(ButtonStyle.Primary)
         let row = new ActionRowBuilder()
             .addComponents(previous, next)
-        i.update({ embeds: [languagesembed], components: [row], ephemeral: true })
+        await i.update({ embeds: [languagesembed], components: [row], ephemeral: true })
     }
     else if (i.customId.startsWith("delete")) {
         if (i.user != i.customId.split(" - ")[1]) return i.reply({ content: "❌ You can't do this", ephemeral: true })
-        i.message.delete()
+        await i.message.delete()
     }
     else if (i.customId.startsWith("edit")) {
         if (i.user != i.customId.split(" - ")[1]) return i.reply({ content: "❌ You can't do this", ephemeral: true })
