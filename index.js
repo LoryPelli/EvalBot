@@ -26,6 +26,10 @@ client.on("ready", () => {
         name: "languages",
         description: "Show supported programming languages",
     })
+    commands?.create({
+        name: "invite",
+        description: "Get the bot invite link",
+    })
     console.log("Ready")
 })
 client.on("messageCreate", async (msg) => {
@@ -95,7 +99,7 @@ client.on("interactionCreate", /** @param { import("discord.js").ChatInputComman
         modal.addComponents(firstrow, secondrow, thirdrow)
         await i.showModal(modal)
     }
-    if (i.commandName === "languages") {
+    else if (i.commandName === "languages") {
         let languages = []
         for (let c = 0; c < runtimes.length; c++) {
             languages.push({ name: `Language: ${runtimes[c].language}`, value: `Version: ${runtimes[c].version}`, inline: true })
@@ -118,6 +122,13 @@ client.on("interactionCreate", /** @param { import("discord.js").ChatInputComman
         let row = new ActionRowBuilder()
             .addComponents(previous, next)
         await i.reply({ embeds: [languagesembed], components: [row], ephemeral: true })
+    }
+    else if (i.commandName === "invite") {
+        let inviteembed = new EmbedBuilder()
+            .setColor("#607387")
+            .setAuthor({ name: i.user.username, iconURL: i.user.avatarURL() })
+            .setTitle("https://discord.com/api/oauth2/authorize?client_id=1076200668810985634&permissions=274877975552&scope=bot%20applications.commands")
+        await i.reply({ embeds: [inviteembed], ephemeral: true })
     }
 })
 client.on("interactionCreate", /** @param { import("discord.js").ButtonInteraction } i */ async (i) => {
