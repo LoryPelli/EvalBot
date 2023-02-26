@@ -1,12 +1,11 @@
 import { IntentsBitField, Client, ActivityType, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } from "discord.js"
-import piston from "piston-client"
+import axios from "axios"
 import config from "./config.json" assert { type: "json" }
 import { createPaste } from "dpaste-ts"
 const allIntents = new IntentsBitField(3276799)
 const client = new Client({ intents: allIntents })
 let runcodes = 0
-let pistonclient = piston("https://emkc.org")
-let runtimes = await pistonclient.runtimes()
+let runtimes = await axios.get("https://emkc.org/api/v2/piston/runtimes").then(response => Array.from(response.data))
 client.on("ready", () => {
     console.clear()
     client.user.setPresence({
@@ -327,14 +326,16 @@ client.on("interactionCreate", /** @param { import("discord.js").ModalSubmitInte
             }
         }
         await i.deferReply()
-        let result = await pistonclient.execute({
+        let result = await axios.post("https://emkc.org/api/v2/piston/execute", {
             "language": language,
+            "version": "*",
             "files": [{
                 "content": code
             }],
             "stdin": input,
             "args": [input]
         })
+        result = result.data
         try {
             let runembed = new EmbedBuilder()
                 .setColor("#607387")
@@ -434,14 +435,16 @@ client.on("interactionCreate", /** @param { import("discord.js").ModalSubmitInte
             }
         }
         await i.deferUpdate()
-        let result = await pistonclient.execute({
+        let result = await axios.post("https://emkc.org/api/v2/piston/execute", {
             "language": language,
+            "version": "*",
             "files": [{
                 "content": code
             }],
             "stdin": input,
             "args": [input]
         })
+        result = result.data
         try {
             let runembed = new EmbedBuilder()
                 .setColor("#607387")
