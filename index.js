@@ -326,6 +326,7 @@ client.on("interactionCreate", /** @param { import("discord.js").ModalSubmitInte
                 }
             }
         }
+        await i.deferReply()
         let result = await pistonclient.execute({
             "language": language,
             "files": [{
@@ -334,7 +335,6 @@ client.on("interactionCreate", /** @param { import("discord.js").ModalSubmitInte
             "stdin": input,
             "args": [input]
         })
-        await i.deferReply()
         try {
             let runembed = new EmbedBuilder()
                 .setColor("#607387")
@@ -433,6 +433,7 @@ client.on("interactionCreate", /** @param { import("discord.js").ModalSubmitInte
                 }
             }
         }
+        await i.deferUpdate()
         let result = await pistonclient.execute({
             "language": language,
             "files": [{
@@ -441,7 +442,6 @@ client.on("interactionCreate", /** @param { import("discord.js").ModalSubmitInte
             "stdin": input,
             "args": [input]
         })
-        await i.deferUpdate()
         try {
             let runembed = new EmbedBuilder()
                 .setColor("#607387")
