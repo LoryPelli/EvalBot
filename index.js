@@ -73,7 +73,7 @@ client.on("interactionCreate", /** @param { import("discord.js").ChatInputComman
             .setLabel("Language")
             .setStyle(TextInputStyle.Short)
             .setRequired(true)
-            .setMinLength(2)
+            .setMinLength(1)
             .setMaxLength(10)
         let code = new TextInputBuilder()
             .setCustomId("code")
@@ -286,7 +286,7 @@ client.on("interactionCreate", /** @param { import("discord.js").ButtonInteracti
             .setLabel("Language")
             .setStyle(TextInputStyle.Short)
             .setRequired(true)
-            .setMinLength(2)
+            .setMinLength(1)
             .setMaxLength(10)
         let code = new TextInputBuilder()
             .setCustomId("code")
@@ -336,6 +336,18 @@ client.on("interactionCreate", /** @param { import("discord.js").ModalSubmitInte
             if (code.includes("fn main() {")) return
             else {
                 code = "use std::io;" + "\n" + "fn main() {" + "\n" + "  " + code + "\n" + "}"
+            }
+        }
+        else if (language == "c") {
+            if (code.includes("int main() {")) return
+            else {
+                code = "#include <stdio.h>" + "\n" + "int main() {" + "\n" + "  " + code + "\n" + "}"
+            }
+        }
+        else if (language == "c++") {
+            if (code.includes("int main() {")) return
+            else {
+                code = "#include <iostream>" + "\n" + "using namespace std;" + "\n" + "int main() {" + "\n" + "  " + code + "\n" + "}"
             }
         }
         let result = await axios.post("https://emkc.org/api/v2/piston/execute", {
@@ -457,6 +469,18 @@ client.on("interactionCreate", /** @param { import("discord.js").ModalSubmitInte
             if (code.includes("fn main() {")) return
             else {
                 code = "use std::io;" + "\n" + "fn main() {" + "\n" + "  " + code + "\n" + "}"
+            }
+        }
+        else if (language == "c") {
+            if (code.includes("int main() {")) return
+            else {
+                code = "#include <stdio.h>" + "\n" + "int main() {" + "\n" + "  " + code + "\n" + "}"
+            }
+        }
+        else if (language == "c++") {
+            if (code.includes("int main() {")) return
+            else {
+                code = "#include <iostream>" + "\n" + "using namespace std;" + "\n" + "int main() {" + "\n" + "  " + code + "\n" + "}"
             }
         }
         let result = await axios.post("https://emkc.org/api/v2/piston/execute", {
