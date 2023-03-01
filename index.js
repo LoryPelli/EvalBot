@@ -326,6 +326,18 @@ client.on("interactionCreate", /** @param { import("discord.js").ModalSubmitInte
             }
         }
         await i.deferReply()
+        if (language == "go") {
+            if (code.includes("func main() {")) return
+            else {
+                code = "package main" + "\n" + "import \"fmt\"" + "\n" + "func main() {" + "\n" + "  " + code + "\n" + "}"
+            }
+        }
+        else if (language == "rust") {
+            if (code.includes("fn main() {")) return
+            else {
+                code = "use std::io;" + "\n" + "fn main() {" + "\n" + "  " + code + "\n" + "}"
+            }
+        }
         let result = await axios.post("https://emkc.org/api/v2/piston/execute", {
             "language": language,
             "version": "*",
@@ -435,6 +447,18 @@ client.on("interactionCreate", /** @param { import("discord.js").ModalSubmitInte
             }
         }
         await i.deferUpdate()
+        if (language == "go") {
+            if (code.includes("func main() {")) return
+            else {
+                code = "package main" + "\n" + "import \"fmt\"" + "\n" + "func main() {" + "\n" + "  " + code + "\n" + "}"
+            }
+        }
+        else if (language == "rust") {
+            if (code.includes("fn main() {")) return
+            else {
+                code = "use std::io;" + "\n" + "fn main() {" + "\n" + "  " + code + "\n" + "}"
+            }
+        }
         let result = await axios.post("https://emkc.org/api/v2/piston/execute", {
             "language": language,
             "version": "*",
