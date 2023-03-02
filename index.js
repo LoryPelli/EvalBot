@@ -329,25 +329,25 @@ client.on("interactionCreate", /** @param { import("discord.js").ModalSubmitInte
         if (language == "go") {
             if (code.includes("func main() {")) return
             else {
-                code = "package main" + "\n" + "import \"fmt\"" + "\n" + "func main() {" + "\n" + "  " + code + "\n" + "}"
+                code = "package main" + "\n" + "import \"fmt\"" + "\n" + "func main() {" + "\n" + "  " + code.replace("\n", "\n  ") + "\n" + "}"
             }
         }
         else if (language == "rust") {
             if (code.includes("fn main() {")) return
             else {
-                code = "use std::io;" + "\n" + "fn main() {" + "\n" + "  " + code + "\n" + "}"
+                code = "use std::io;" + "\n" + "fn main() {" + "\n" + "  " + code.replace("\n", "\n  ") + "\n" + "}"
             }
         }
         else if (language == "c") {
             if (code.includes("int main() {")) return
             else {
-                code = "#include <stdio.h>" + "\n" + "int main() {" + "\n" + "  " + code + "\n" + "}"
+                code = "#include <stdio.h>" + "\n" + "int main() {" + "\n" + "  " + code.replace("\n", "\n  ") + "\n" + "}"
             }
         }
         else if (language == "c++") {
             if (code.includes("int main() {")) return
             else {
-                code = "#include <iostream>" + "\n" + "using namespace std;" + "\n" + "int main() {" + "\n" + "  " + code + "\n" + "}"
+                code = "#include <iostream>" + "\n" + "using namespace std;" + "\n" + "int main() {" + "\n" + "  " + code.replace("\n", "\n  ") + "\n" + "}"
             }
         }
         let result = await axios.post("https://emkc.org/api/v2/piston/execute", {
@@ -462,25 +462,25 @@ client.on("interactionCreate", /** @param { import("discord.js").ModalSubmitInte
         if (language == "go") {
             if (code.includes("func main() {")) return
             else {
-                code = "package main" + "\n" + "import \"fmt\"" + "\n" + "func main() {" + "\n" + "  " + code + "\n" + "}"
+                code = "package main" + "\n" + "import \"fmt\"" + "\n" + "func main() {" + "\n" + "  " + code.replace("\n", "\n  ") + "\n" + "}"
             }
         }
         else if (language == "rust") {
             if (code.includes("fn main() {")) return
             else {
-                code = "use std::io;" + "\n" + "fn main() {" + "\n" + "  " + code + "\n" + "}"
+                code = "use std::io;" + "\n" + "fn main() {" + "\n" + "  " + code.replace("\n", "\n  ") + "\n" + "}"
             }
         }
         else if (language == "c") {
             if (code.includes("int main() {")) return
             else {
-                code = "#include <stdio.h>" + "\n" + "int main() {" + "\n" + "  " + code + "\n" + "}"
+                code = "#include <stdio.h>" + "\n" + "int main() {" + "\n" + "  " + code.replace("\n", "\n  ")  + "\n" + "}"
             }
         }
         else if (language == "c++") {
             if (code.includes("int main() {")) return
             else {
-                code = "#include <iostream>" + "\n" + "using namespace std;" + "\n" + "int main() {" + "\n" + "  " + code + "\n" + "}"
+                code = "#include <iostream>" + "\n" + "using namespace std;" + "\n" + "int main() {" + "\n" + "  " + code.replace("\n", "\n  ") + "\n" + "}"
             }
         }
         let result = await axios.post("https://emkc.org/api/v2/piston/execute", {
