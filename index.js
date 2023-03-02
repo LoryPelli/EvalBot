@@ -350,6 +350,12 @@ client.on("interactionCreate", /** @param { import("discord.js").ModalSubmitInte
                 code = "#include <iostream>" + "\n" + "using namespace std;" + "\n" + "int main() {" + "\n" + "  " + code.replace("\n", "\n  ") + "\n" + "}"
             }
         }
+        else if (language == "csharp.net") {
+            if (code.includes("static void Main(string[] args) {")) return
+            else {
+                code = "using System; " + "\n" + "class Program {" + "\n" + "  static void Main(string[] args) {" + "\n" + "    " + code.replace("\n", "\n    ") + "\n" + "  }" + "\n" + "}"
+            }
+        }
         let result = await axios.post("https://emkc.org/api/v2/piston/execute", {
             "language": language,
             "version": "*",
@@ -481,6 +487,12 @@ client.on("interactionCreate", /** @param { import("discord.js").ModalSubmitInte
             if (code.includes("int main() {")) return
             else {
                 code = "#include <iostream>" + "\n" + "using namespace std;" + "\n" + "int main() {" + "\n" + "  " + code.replace("\n", "\n  ") + "\n" + "}"
+            }
+        }
+        else if (language == "csharp.net") {
+            if (code.includes("static void Main(string[] args) {")) return
+            else {
+                code = "using System; " + "\n" + "class Program {" + "\n" + "  static void Main(string[] args) {" + "\n" + "    " + code.replace("\n", "\n    ") + "\n" + "  }" + "\n" + "}"
             }
         }
         let result = await axios.post("https://emkc.org/api/v2/piston/execute", {
