@@ -353,7 +353,19 @@ client.on("interactionCreate", /** @param { import("discord.js").ModalSubmitInte
         else if (language == "csharp.net") {
             if (code.includes("static void Main(string[] args) {")) return
             else {
-                code = "using System; " + "\n" + "class Program {" + "\n" + "  static void Main(string[] args) {" + "\n" + "    " + code.replace("\n", "\n    ") + "\n" + "  }" + "\n" + "}"
+                code = "using System;" + "\n" + "class Program {" + "\n" + "  static void Main(string[] args) {" + "\n" + "    " + code.replace("\n", "\n    ") + "\n" + "  }" + "\n" + "}"
+            }
+        }
+        else if (language == "java") {
+            if (code.includes("public static void Main(string[] args) {")) return
+            else {
+                code = "public class Main {" + "\n" + "  public static void main(String[] args) {" + "\n" + "    " + code.replace("\n", "\n    ") + "\n" + "  }" + "\n" + "}"
+            }
+        }
+        else if (language == "kotlin") {
+            if (code.includes("fun main() {")) return
+            else {
+                code = "fun main() {" + "\n" + "  " + code.replace("\n", "\n  ") + "\n" + "}"
             }
         }
         let result = await axios.post("https://emkc.org/api/v2/piston/execute", {
@@ -492,7 +504,19 @@ client.on("interactionCreate", /** @param { import("discord.js").ModalSubmitInte
         else if (language == "csharp.net") {
             if (code.includes("static void Main(string[] args) {")) return
             else {
-                code = "using System; " + "\n" + "class Program {" + "\n" + "  static void Main(string[] args) {" + "\n" + "    " + code.replace("\n", "\n    ") + "\n" + "  }" + "\n" + "}"
+                code = "using System;" + "\n" + "class Program {" + "\n" + "  static void Main(string[] args) {" + "\n" + "    " + code.replace("\n", "\n    ") + "\n" + "  }" + "\n" + "}"
+            }
+        }
+        else if (language == "java") {
+            if (code.includes("public static void Main(string[] args) {")) return
+            else {
+                code = "public class Main {" + "\n" + "  public static void main(String[] args) {" + "\n" + "    " + code.replace("\n", "\n    ") + "\n" + "  }" + "\n" + "}"
+            }
+        }
+        else if (language == "kotlin") {
+            if (code.includes("fun main() {")) return
+            else {
+                code = "fun main() {" + "\n" + "  " + code.replace("\n", "\n  ") + "\n" + "}"
             }
         }
         let result = await axios.post("https://emkc.org/api/v2/piston/execute", {
