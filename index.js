@@ -2,8 +2,10 @@ import { IntentsBitField, Client, ActivityType, EmbedBuilder, ButtonBuilder, But
 import axios from "axios"
 import config from "./config.json" assert { type: "json" }
 import { createPaste } from "dpaste-ts"
+import languagedetection from "@vscode/vscode-languagedetection"
 const allIntents = new IntentsBitField(3276799)
 const client = new Client({ intents: allIntents })
+const model = new languagedetection.ModelOperations()
 let runcodes = 0
 let runtimes = await axios.get("https://emkc.org/api/v2/piston/runtimes").then(response => Array.from(response.data))
 client.on("ready", () => {
@@ -28,6 +30,10 @@ client.on("ready", () => {
     commands?.create({
         name: "invite",
         description: "Get the bot invite link",
+    })
+    commands?.create({
+        name: "Eval",
+        type: 3
     })
     console.log("Ready")
 })
@@ -632,6 +638,123 @@ client.on("interactionCreate", /** @param { import("discord.js").ModalSubmitInte
             let row = new ActionRowBuilder()
                 .addComponents(edit, cancel)
             await i.message.edit({ embeds: [errorembed], components: [row] })
+            console.log(error)
+            runcodes += 1
+        }
+    }
+})
+client.on("interactionCreate", /** @param { import("discord.js").MessageContextMenuCommandInteraction } i */ async (i) => {
+    if (i.commandName === "Eval") {
+        let code = i.targetMessage.content
+        let res = await model.runModel(code)
+        let language = res[0]?.languageId
+        let version
+        for (let i = 0; i < runtimes.length; i++) {
+            if (runtimes[i].aliases.length != 0) {
+                for (let c = 0; c < runtimes[i].aliases.length; c++) {
+                    if (language == runtimes[i].language || language == runtimes[i].aliases[c]) {
+                        language = runtimes[i].language
+                        version = runtimes[i].version
+                    }
+                }
+            }
+            else {
+                if (language == runtimes[i].language) {
+                    language = runtimes[i].language
+                    version = runtimes[i].version
+                }
+            }
+        }
+        if (version == undefined) {
+            return i.reply({ content: "Unknown Language!", ephemeral: true })
+        }
+        await i.deferReply()
+        let result = await axios.post("https://emkc.org/api/v2/piston/execute", {
+            "language": language,
+            "version": "*",
+            "files": [{
+                "content": code
+            }]
+        })
+        result = result.data
+        try {
+            let runembed = new EmbedBuilder()
+                .setColor("#607387")
+                .setAuthor({ name: i.user.username, iconURL: i.user.avatarURL() })
+                .setTitle("Evaluation Result")
+                .addFields(
+                    { name: "Language", value: "```" + "\n" + language + "\n" + "```", inline: false },
+                    { name: "Version", value: "```" + "\n" + version + "\n" + "```", inline: false },
+                    { name: "Input code", value: "```" + language + "\n" + code.slice(0, 925) + "\n" + "```", inline: false },
+                    { name: "Output", value: "```" + language + "\n" + result.run.output.slice(0, 925) + "\n" + "```", inline: false })
+            let cancel = new ButtonBuilder()
+                .setCustomId(`delete - ${i.user.id}`)
+                .setLabel("Delete")
+                .setStyle(ButtonStyle.Danger)
+            let edit = new ButtonBuilder()
+                .setCustomId(`edit - ${i.user.id}`)
+                .setLabel("Edit")
+                .setStyle(ButtonStyle.Primary)
+            let row = new ActionRowBuilder()
+                .addComponents(edit, cancel)
+            if (code.length > 925) {
+                runembed.setFields(
+                    { name: "Language", value: "```" + "\n" + language + "\n" + "```", inline: false },
+                    { name: "Version", value: "```" + "\n" + version + "\n" + "```", inline: false },
+                    { name: "Input", value: "```" + language + "\n" + code.slice(0, 925) + "\n" + "```" + "**__TOO LONG__**", inline: false },
+                    { name: "Output", value: "```" + language + "\n" + result.run.output.slice(0, 925) + "\n" + "```", inline: false })
+            }
+            if (result.run.output.length > 925) {
+                let url = await createPaste({
+                    content: result.run.output,
+                    expiry_days: 365
+                })
+                runembed.setFields(
+                    { name: "Language", value: "```" + "\n" + language + "\n" + "```", inline: false },
+                    { name: "Version", value: "```" + "\n" + version + "\n" + "```", inline: false },
+                    { name: "Input", value: "```" + language + "\n" + code.slice(0, 925) + "\n" + "```", inline: false },
+                    { name: "Output", value: "```" + language + "\n" + result.run.output.slice(0, 925) + "\n" + "```" + "**__TOO LONG__**" + "\n" + `wiew entire output [here](${url})`, inline: false })
+            }
+            if (code.length > 925 && result.run.output.length > 925) {
+                let url = await createPaste({
+                    content: result.run.output,
+                    expiry_days: 365
+                })
+                runembed.setFields(
+                    { name: "Language", value: "```" + "\n" + language + "\n" + "```", inline: false },
+                    { name: "Version", value: "```" + "\n" + version + "\n" + "```", inline: false },
+                    { name: "Input", value: "```" + language + "\n" + code.slice(0, 925) + "\n" + "```" + "**__TOO LONG__**", inline: false },
+                    { name: "Output", value: "```" + language + "\n" + result.run.output.slice(0, 925) + "\n" + "```" + "**__TOO LONG__**" + "\n" + `wiew entire output [here](${url})`, inline: false })
+            }
+            if (result.run.output.length == 0 || result.run.output == "\n") {
+                runembed.setFields(
+                    { name: "Language", value: "```" + "\n" + language + "\n" + "```", inline: false },
+                    { name: "Version", value: "```" + "\n" + version + "\n" + "```", inline: false },
+                    { name: "Input", value: "```" + language + "\n" + code.slice(0, 925) + "\n" + "```", inline: false },
+                    { name: "Output", value: "No output!", inline: false })
+            }
+            await i.followUp({ embeds: [runembed], components: [row] })
+            runcodes += 1
+        }
+        catch (error) {
+            let errorembed = new EmbedBuilder()
+                .setColor("#607387")
+                .setAuthor({ name: i.user.username, iconURL: i.user.avatarURL() })
+                .setTitle("Evaluation Result")
+                .setDescription("There was an error!")
+                .addFields(
+                    { name: "Error", value: "```" + "\n" + error + "\n" + "```", inline: false })
+            let cancel = new ButtonBuilder()
+                .setCustomId(`delete - ${i.user.id}`)
+                .setLabel("Delete")
+                .setStyle(ButtonStyle.Danger)
+            let edit = new ButtonBuilder()
+                .setCustomId(`edit - ${i.user.id}`)
+                .setLabel("Edit")
+                .setStyle(ButtonStyle.Primary)
+            let row = new ActionRowBuilder()
+                .addComponents(edit, cancel)
+            await i.followUp({ embeds: [errorembed], components: [row] })
             console.log(error)
             runcodes += 1
         }
