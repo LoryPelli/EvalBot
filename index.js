@@ -646,21 +646,23 @@ client.on("interactionCreate", /** @param { import("discord.js").ModalSubmitInte
 client.on("interactionCreate", /** @param { import("discord.js").MessageContextMenuCommandInteraction } i */ async (i) => {
     if (i.commandName === "Eval") {
         let code = i.targetMessage.content.replace(/```/g, "")
+        let res = await model.runModel(code)
+        let language = res[0]?.languageId
+        let version
         for (let i = 0; i < runtimes.length; i++) {
             if (code.startsWith(runtimes[i].language)) {
                 code = code.replace(runtimes[i].language, "")
+                language = runtimes[i].language
             }
             else {
                 for (let c = 0; c < runtimes[i].aliases.length; c++) {
                     if (code.startsWith(runtimes[i].aliases[c])) {
                         code = code.replace(runtimes[i].aliases[c], "")
+                        language = runtimes[i].language
                     }
                 }
             }
         }
-        let res = await model.runModel(code)
-        let language = res[0]?.languageId
-        let version
         for (let i = 0; i < runtimes.length; i++) {
             if (runtimes[i].aliases.length != 0) {
                 for (let c = 0; c < runtimes[i].aliases.length; c++) {
