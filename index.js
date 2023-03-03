@@ -318,8 +318,16 @@ client.on("interactionCreate", /** @param { import("discord.js").ModalSubmitInte
         let input = "" || i.fields.getTextInputValue("input")
         let version
         for (let i = 0; i < runtimes.length; i++) {
-            for (let c = 0; c < runtimes[i].aliases.length; c++) {
-                if (language == runtimes[i].language || language == runtimes[i].aliases[c]) {
+            if (runtimes[i].aliases.length != 0) {
+                for (let c = 0; c < runtimes[i].aliases.length; c++) {
+                    if (language == runtimes[i].language || language == runtimes[i].aliases[c]) {
+                        language = runtimes[i].language
+                        version = runtimes[i].version
+                    }
+                }
+            }
+            else {
+                if (language == runtimes[i].language) {
                     language = runtimes[i].language
                     version = runtimes[i].version
                 }
@@ -469,8 +477,16 @@ client.on("interactionCreate", /** @param { import("discord.js").ModalSubmitInte
         let input = "" || i.fields.getTextInputValue("input")
         let version
         for (let i = 0; i < runtimes.length; i++) {
-            for (let c = 0; c < runtimes[i].aliases.length; c++) {
-                if (language == runtimes[i].language || language == runtimes[i].aliases[c]) {
+            if (runtimes[i].aliases.length != 0) {
+                for (let c = 0; c < runtimes[i].aliases.length; c++) {
+                    if (language == runtimes[i].language || language == runtimes[i].aliases[c]) {
+                        language = runtimes[i].language
+                        version = runtimes[i].version
+                    }
+                }
+            }
+            else {
+                if (language == runtimes[i].language) {
                     language = runtimes[i].language
                     version = runtimes[i].version
                 }
@@ -492,7 +508,7 @@ client.on("interactionCreate", /** @param { import("discord.js").ModalSubmitInte
         else if (language == "c") {
             if (code.includes("int main() {")) return
             else {
-                code = "#include <stdio.h>" + "\n" + "int main() {" + "\n" + "  " + code.replace("\n", "\n  ")  + "\n" + "}"
+                code = "#include <stdio.h>" + "\n" + "int main() {" + "\n" + "  " + code.replace("\n", "\n  ") + "\n" + "}"
             }
         }
         else if (language == "c++") {
