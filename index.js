@@ -313,13 +313,13 @@ client.on("interactionCreate", /** @param { import("discord.js").ButtonInteracti
 client.on("interactionCreate", /** @param { import("discord.js").ModalSubmitInteraction } i */ async (i) => {
     if (!i.isModalSubmit()) return
     else if (i.customId === "run") {
-        let language = i.fields.getTextInputValue("language")
+        let language = i.fields.getTextInputValue("language").toLowerCase()
         let code = i.fields.getTextInputValue("code")
         let input = "" || i.fields.getTextInputValue("input")
         let version
         for (let i = 0; i < runtimes.length; i++) {
             for (let c = 0; c < runtimes[i].aliases.length; c++) {
-                if (language.toLowerCase() == runtimes[i].language || language.toLowerCase() == runtimes[i].aliases[c]) {
+                if (language == runtimes[i].language || language == runtimes[i].aliases[c]) {
                     language = runtimes[i].language
                     version = runtimes[i].version
                 }
@@ -464,13 +464,13 @@ client.on("interactionCreate", /** @param { import("discord.js").ModalSubmitInte
         }
     }
     else if (i.customId === "runedit") {
-        let language = i.fields.getTextInputValue("language")
+        let language = i.fields.getTextInputValue("language").toLowerCase()
         let code = i.fields.getTextInputValue("code")
         let input = "" || i.fields.getTextInputValue("input")
         let version
         for (let i = 0; i < runtimes.length; i++) {
             for (let c = 0; c < runtimes[i].aliases.length; c++) {
-                if (language.toLowerCase() == runtimes[i].language || language.toLowerCase() == runtimes[i].aliases[c]) {
+                if (language == runtimes[i].language || language == runtimes[i].aliases[c]) {
                     language = runtimes[i].language
                     version = runtimes[i].version
                 }
