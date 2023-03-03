@@ -333,6 +333,9 @@ client.on("interactionCreate", /** @param { import("discord.js").ModalSubmitInte
                 }
             }
         }
+        if (version == undefined) {
+            return i.reply({ content: "Unknown Language!", ephemeral: true })
+        }
         await i.deferReply()
         if (language == "go") {
             if (code.includes("func main() {")) return
@@ -491,6 +494,9 @@ client.on("interactionCreate", /** @param { import("discord.js").ModalSubmitInte
                     version = runtimes[i].version
                 }
             }
+        }
+        if (version == undefined) {
+            return i.reply({ content: "Unknown Language!", ephemeral: true })
         }
         await i.deferUpdate()
         if (language == "go") {
