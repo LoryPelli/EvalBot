@@ -680,7 +680,49 @@ client.on("interactionCreate", /** @param { import("discord.js").MessageContextM
             }
         }
         if (version == undefined) {
-            return i.reply({ content: "Unknown Language!", ephemeral: true })
+            return i.reply({ content: "Unknown Language!, try with a codeblock by specifing code language", ephemeral: true })
+        }
+        if (language == "go") {
+            if (code.includes("func main() {")) return
+            else {
+                code = "package main" + "\n" + "import \"fmt\"" + "\n" + "func main() {" + "\n" + "  " + code.replace("\n", "\n  ") + "\n" + "}"
+            }
+        }
+        else if (language == "rust") {
+            if (code.includes("fn main() {")) return
+            else {
+                code = "use std::io;" + "\n" + "fn main() {" + "\n" + "  " + code.replace("\n", "\n  ") + "\n" + "}"
+            }
+        }
+        else if (language == "c") {
+            if (code.includes("int main() {")) return
+            else {
+                code = "#include <stdio.h>" + "\n" + "int main() {" + "\n" + "  " + code.replace("\n", "\n  ") + "\n" + "}"
+            }
+        }
+        else if (language == "c++") {
+            if (code.includes("int main() {")) return
+            else {
+                code = "#include <iostream>" + "\n" + "using namespace std;" + "\n" + "int main() {" + "\n" + "  " + code.replace("\n", "\n  ") + "\n" + "}"
+            }
+        }
+        else if (language == "csharp.net") {
+            if (code.includes("static void Main(string[] args) {")) return
+            else {
+                code = "using System;" + "\n" + "class Program {" + "\n" + "  static void Main(string[] args) {" + "\n" + "    " + code.replace("\n", "\n    ") + "\n" + "  }" + "\n" + "}"
+            }
+        }
+        else if (language == "java") {
+            if (code.includes("public static void Main(string[] args) {")) return
+            else {
+                code = "public class Main {" + "\n" + "  public static void main(String[] args) {" + "\n" + "    " + code.replace("\n", "\n    ") + "\n" + "  }" + "\n" + "}"
+            }
+        }
+        else if (language == "kotlin") {
+            if (code.includes("fun main() {")) return
+            else {
+                code = "fun main() {" + "\n" + "  " + code.replace("\n", "\n  ") + "\n" + "}"
+            }
         }
         await i.deferReply()
         let result = await axios.post("https://emkc.org/api/v2/piston/execute", {
