@@ -53,7 +53,7 @@ client.on("messageCreate", async (msg) => {
                     .setColor("#607387")
                     .setTitle("Evaluation Result")
                     .addFields(
-                        { name: "Input", value: "```js" + "\n" + code + "\n" + "```", inline: false },
+                        { name: "Input", value: "```js" + "\n" + code.slice(0, 925) + "\n" + "```", inline: false },
                         { name: "Output", value: "```js" + "\n" + codeval + "\n" + "```", inline: false })
                 await msg.channel.send({ embeds: [evalembed] })
             }
@@ -62,7 +62,7 @@ client.on("messageCreate", async (msg) => {
                     .setColor("#607387")
                     .setTitle("Evaluation Result")
                     .addFields(
-                        { name: "Input", value: "```js" + "\n" + code + "\n" + "```", inline: false },
+                        { name: "Input", value: "```js" + "\n" + code.slice(0, 925) + "\n" + "```", inline: false },
                         { name: "Output", value: "```js" + "\n" + error + "\n" + "```", inline: false })
                 await msg.channel.send({ embeds: [evalerrorembed] })
             }
