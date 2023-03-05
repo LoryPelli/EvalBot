@@ -89,7 +89,7 @@ client.on("interactionCreate", /** @param { import("discord.js").ChatInputComman
             .setMinLength(5)
         let input = new TextInputBuilder()
             .setCustomId("input")
-            .setLabel("Input")
+            .setLabel("Input (separate with comma)")
             .setStyle(TextInputStyle.Short)
             .setRequired(false)
             .setPlaceholder("(optional)")
@@ -302,7 +302,7 @@ client.on("interactionCreate", /** @param { import("discord.js").ButtonInteracti
             .setMinLength(5)
         let input = new TextInputBuilder()
             .setCustomId("input")
-            .setLabel("Input")
+            .setLabel("Input (separate with comma)")
             .setStyle(TextInputStyle.Short)
             .setRequired(false)
             .setPlaceholder("(optional)")
@@ -392,7 +392,7 @@ client.on("interactionCreate", /** @param { import("discord.js").ModalSubmitInte
                 "content": code
             }],
             "stdin": input,
-            "args": [input]
+            "args": input.split(",")
         })
         result = result.data
         try {
@@ -554,7 +554,7 @@ client.on("interactionCreate", /** @param { import("discord.js").ModalSubmitInte
                 "content": code
             }],
             "stdin": input,
-            "args": [input]
+            "args": input.split(",")
         })
         result = result.data
         try {
