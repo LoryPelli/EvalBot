@@ -693,7 +693,7 @@ client.on("interactionCreate", /** @param { import("discord.js").MessageContextM
         else if (language == "rust") {
             if (code.includes("fn main() {")) return
             else {
-                code = "use std::io;" + "\n" + "fn main() {" + "\n" + "  " + code.replace(/\n/g, "\n  ")  + "\n" + "}"
+                code = "use std::io;" + "\n" + "fn main() {" + "\n" + "  " + code.replace(/\n/g, "\n  ") + "\n" + "}"
             }
         }
         else if (language == "c") {
