@@ -3,11 +3,24 @@ import axios from "axios"
 import config from "./config.json" assert { type: "json" }
 import { createPaste } from "dpaste-ts"
 import languagedetection from "@vscode/vscode-languagedetection"
+import { AutoPoster } from "topgg-autoposter"
+import { Client as _Client } from "statcord.js"
 const allIntents = new IntentsBitField(3276799)
 const client = new Client({ intents: allIntents })
 const model = new languagedetection.ModelOperations()
 let runcodes = 0
 let runtimes = await axios.get("https://emkc.org/api/v2/piston/runtimes").then(response => Array.from(response.data))
+const poster = AutoPoster(config.topgg, client)
+poster.on('posted', (stats) => {
+  console.log(`${stats.serverCount} servers | ${stats.shardCount} shards`)
+})
+const statcord = new _Client({
+  key: config.statcord,
+  client,
+  postCpuStatistics: true,
+  postMemStatistics: true,
+  postNetworkStatistics: true
+})
 client.on("ready", () => {
     console.clear()
     client.user.setPresence({
@@ -18,6 +31,7 @@ client.on("ready", () => {
             activities: [{ name: `I executed ${runcodes} codes since I am online (updates every 3 minutes)`, type: ActivityType.Watching }],
         })
     }, 210000)
+    statcord.autopost()
     let commands = client.application?.commands
     commands?.create({
         name: "run",
