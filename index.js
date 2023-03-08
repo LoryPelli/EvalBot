@@ -410,6 +410,7 @@ client.on("interactionCreate", /** @param { import("discord.js").ModalSubmitInte
         })
         result = result.data
         try {
+
             let runembed = new EmbedBuilder()
                 .setColor("#607387")
                 .setAuthor({ name: i.user.username, iconURL: i.user.avatarURL() })
@@ -418,7 +419,8 @@ client.on("interactionCreate", /** @param { import("discord.js").ModalSubmitInte
                     { name: "Language", value: "```" + "\n" + language + "\n" + "```", inline: false },
                     { name: "Version", value: "```" + "\n" + version + "\n" + "```", inline: false },
                     { name: "Input code", value: "```" + language + "\n" + code.slice(0, 925) + "\n" + "```", inline: false },
-                    { name: "Output", value: "```" + language + "\n" + result.run.output.slice(0, 925) + "\n" + "```", inline: false })
+                    { name: "Output", value: "```" + language + "\n" + result.run.output.slice(0, 925) + "\n" + "```", inline: false },
+                    { name: "Output code", value: "```" + "\n" + result.run.code + "\n" + "```", inline: false })
             let cancel = new ButtonBuilder()
                 .setCustomId(`delete - ${i.user.id}`)
                 .setLabel("Delete")
@@ -437,7 +439,8 @@ client.on("interactionCreate", /** @param { import("discord.js").ModalSubmitInte
                     { name: "Language", value: "```" + "\n" + language + "\n" + "```", inline: false },
                     { name: "Version", value: "```" + "\n" + version + "\n" + "```", inline: false },
                     { name: "Input", value: "```" + language + "\n" + code.slice(0, 925) + "\n" + "```" + "**__TOO LONG__**", inline: false },
-                    { name: "Output", value: "```" + language + "\n" + result.run.output.slice(0, 925) + "\n" + "```", inline: false })
+                    { name: "Output", value: "```" + language + "\n" + result.run.output.slice(0, 925) + "\n" + "```", inline: false },
+                    { name: "Output code", value: "```" + "\n" + result.run.code + "\n" + "```", inline: false })
             }
             if (result.run.output.length > 925) {
                 let url = await createPaste({
@@ -448,7 +451,8 @@ client.on("interactionCreate", /** @param { import("discord.js").ModalSubmitInte
                     { name: "Language", value: "```" + "\n" + language + "\n" + "```", inline: false },
                     { name: "Version", value: "```" + "\n" + version + "\n" + "```", inline: false },
                     { name: "Input", value: "```" + language + "\n" + code.slice(0, 925) + "\n" + "```", inline: false },
-                    { name: "Output", value: "```" + language + "\n" + result.run.output.slice(0, 925) + "\n" + "```" + "**__TOO LONG__**" + "\n" + `wiew entire output [here](${url})`, inline: false })
+                    { name: "Output", value: "```" + language + "\n" + result.run.output.slice(0, 925) + "\n" + "```" + "**__TOO LONG__**" + "\n" + `wiew entire output [here](${url})`, inline: false },
+                    { name: "Output code", value: "```" + "\n" + result.run.code + "\n" + "```", inline: false })
             }
             if (code.length > 925 && result.run.output.length > 925) {
                 let url = await createPaste({
@@ -459,7 +463,8 @@ client.on("interactionCreate", /** @param { import("discord.js").ModalSubmitInte
                     { name: "Language", value: "```" + "\n" + language + "\n" + "```", inline: false },
                     { name: "Version", value: "```" + "\n" + version + "\n" + "```", inline: false },
                     { name: "Input", value: "```" + language + "\n" + code.slice(0, 925) + "\n" + "```" + "**__TOO LONG__**", inline: false },
-                    { name: "Output", value: "```" + language + "\n" + result.run.output.slice(0, 925) + "\n" + "```" + "**__TOO LONG__**" + "\n" + `wiew entire output [here](${url})`, inline: false })
+                    { name: "Output", value: "```" + language + "\n" + result.run.output.slice(0, 925) + "\n" + "```" + "**__TOO LONG__**" + "\n" + `wiew entire output [here](${url})`, inline: false },
+                    { name: "Output code", value: "```" + "\n" + result.run.code + "\n" + "```", inline: false })
             }
             if (result.run.output.length == 0 || result.run.output == "\n") {
                 runembed.setFields(
@@ -580,7 +585,8 @@ client.on("interactionCreate", /** @param { import("discord.js").ModalSubmitInte
                     { name: "Language", value: "```" + "\n" + language + "\n" + "```", inline: false },
                     { name: "Version", value: "```" + "\n" + version + "\n" + "```", inline: false },
                     { name: "Input code", value: "```" + language + "\n" + code.slice(0, 925) + "\n" + "```", inline: false },
-                    { name: "Output", value: "```" + language + "\n" + result.run.output.slice(0, 925) + "\n" + "```", inline: false })
+                    { name: "Output", value: "```" + language + "\n" + result.run.output.slice(0, 925) + "\n" + "```", inline: false },
+                    { name: "Output code", value: "```" + "\n" + result.run.code + "\n" + "```", inline: false })
             let cancel = new ButtonBuilder()
                 .setCustomId(`delete - ${i.user.id}`)
                 .setLabel("Delete")
@@ -599,7 +605,8 @@ client.on("interactionCreate", /** @param { import("discord.js").ModalSubmitInte
                     { name: "Language", value: "```" + "\n" + language + "\n" + "```", inline: false },
                     { name: "Version", value: "```" + "\n" + version + "\n" + "```", inline: false },
                     { name: "Input", value: "```" + language + "\n" + code.slice(0, 925) + "\n" + "```" + "**__TOO LONG__**", inline: false },
-                    { name: "Output", value: "```" + language + "\n" + result.run.output.slice(0, 925) + "\n" + "```", inline: false })
+                    { name: "Output", value: "```" + language + "\n" + result.run.output.slice(0, 925) + "\n" + "```", inline: false },
+                    { name: "Output code", value: "```" + "\n" + result.run.code + "\n" + "```", inline: false })
             }
             if (result.run.output.length > 925) {
                 let url = await createPaste({
@@ -610,7 +617,8 @@ client.on("interactionCreate", /** @param { import("discord.js").ModalSubmitInte
                     { name: "Language", value: "```" + "\n" + language + "\n" + "```", inline: false },
                     { name: "Version", value: "```" + "\n" + version + "\n" + "```", inline: false },
                     { name: "Input", value: "```" + language + "\n" + code.slice(0, 925) + "\n" + "```", inline: false },
-                    { name: "Output", value: "```" + language + "\n" + result.run.output.slice(0, 925) + "\n" + "```" + "**__TOO LONG__**" + "\n" + `wiew entire output [here](${url})`, inline: false })
+                    { name: "Output", value: "```" + language + "\n" + result.run.output.slice(0, 925) + "\n" + "```" + "**__TOO LONG__**" + "\n" + `wiew entire output [here](${url})`, inline: false },
+                    { name: "Output code", value: "```" + "\n" + result.run.code + "\n" + "```", inline: false })
             }
             if (code.length > 925 && result.run.output.length > 925) {
                 let url = await createPaste({
@@ -621,7 +629,8 @@ client.on("interactionCreate", /** @param { import("discord.js").ModalSubmitInte
                     { name: "Language", value: "```" + "\n" + language + "\n" + "```", inline: false },
                     { name: "Version", value: "```" + "\n" + version + "\n" + "```", inline: false },
                     { name: "Input", value: "```" + language + "\n" + code.slice(0, 925) + "\n" + "```" + "**__TOO LONG__**", inline: false },
-                    { name: "Output", value: "```" + language + "\n" + result.run.output.slice(0, 925) + "\n" + "```" + "**__TOO LONG__**" + "\n" + `wiew entire output [here](${url})`, inline: false })
+                    { name: "Output", value: "```" + language + "\n" + result.run.output.slice(0, 925) + "\n" + "```" + "**__TOO LONG__**" + "\n" + `wiew entire output [here](${url})`, inline: false },
+                    { name: "Output code", value: "```" + "\n" + result.run.code + "\n" + "```", inline: false })
             }
             if (result.run.output.length == 0 || result.run.output == "\n") {
                 runembed.setFields(
