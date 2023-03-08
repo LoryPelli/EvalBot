@@ -410,7 +410,6 @@ client.on("interactionCreate", /** @param { import("discord.js").ModalSubmitInte
         })
         result = result.data
         try {
-
             let runembed = new EmbedBuilder()
                 .setColor("#607387")
                 .setAuthor({ name: i.user.username, iconURL: i.user.avatarURL() })
