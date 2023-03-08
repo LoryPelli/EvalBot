@@ -1,22 +1,23 @@
 import { IntentsBitField, Client, ActivityType, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } from "discord.js"
 import axios from "axios"
-import config from "./config.json" assert { type: "json" }
 import { createPaste } from "dpaste-ts"
 import languagedetection from "@vscode/vscode-languagedetection"
 import { AutoPoster } from "topgg-autoposter"
 import { Client as _Client } from "statcord.js"
 import Tesseract from "tesseract.js"
+import dotenv from "dotenv"
+dotenv.config()
 const allIntents = new IntentsBitField(3276799)
 const client = new Client({ intents: allIntents })
 const model = new languagedetection.ModelOperations()
 let runcodes = 0
 let runtimes = await axios.get("https://emkc.org/api/v2/piston/runtimes").then(response => Array.from(response.data))
-const poster = AutoPoster(config.topgg, client)
+const poster = AutoPoster(process.env.TOPGG, client)
 poster.on('posted', (stats) => {
   console.log(`${stats.serverCount} servers | ${stats.shardCount} shards`)
 })
 const statcord = new _Client({
-  key: config.statcord,
+  key: process.env.STATCORD,
   client,
   postCpuStatistics: true,
   postMemStatistics: true,
@@ -851,4 +852,4 @@ client.on("interactionCreate", /** @param { import("discord.js").MessageContextM
 process.on("uncaughtException", e => {
     console.log(e)
 })
-client.login(config.beta_token)
+client.login(process.env.TOKEN)
