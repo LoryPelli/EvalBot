@@ -5,6 +5,7 @@ import { createPaste } from "dpaste-ts"
 import languagedetection from "@vscode/vscode-languagedetection"
 import { AutoPoster } from "topgg-autoposter"
 import { Client as _Client } from "statcord.js"
+import Tesseract from "tesseract.js"
 const allIntents = new IntentsBitField(3276799)
 const client = new Client({ intents: allIntents })
 const model = new languagedetection.ModelOperations()
@@ -671,11 +672,17 @@ client.on("interactionCreate", /** @param { import("discord.js").MessageContextM
         code = code.replace(/\n/, "")
         code = code.replace(/\n$/, "")
         code = code.replace(/`/g, "`\u200b")
+        let attachment = false
+        if (i.targetMessage.attachments.size != 0) {
+            attachment = true
+            code = await Tesseract.recognize(i.targetMessage.attachments.first().url, "eng")
+            code = code.data.text
+        }
         let res = await model.runModel(code)
         let language = res[0]?.languageId
         let version
         for (let i = 0; i < runtimes.length; i++) {
-            if (code.startsWith(runtimes[i].language)) {
+            if (code.startsWith(runtimes[i].language) && attachment == false) {
                 code = code.replace(runtimes[i].language, "")
                 language = runtimes[i].language
             }
