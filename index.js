@@ -334,7 +334,7 @@ client.on("interactionCreate", /** @param { import("discord.js").ModalSubmitInte
     if (!i.isModalSubmit()) return
     else if (i.customId === "run") {
         let language = i.fields.getTextInputValue("language").toLowerCase()
-        let code = i.fields.getTextInputValue("code")
+        let code = i.fields.getTextInputValue("code").replace(/`/g, "`\u200b")
         let input = "" || i.fields.getTextInputValue("input")
         let version
         for (let i = 0; i < runtimes.length; i++) {
@@ -500,7 +500,7 @@ client.on("interactionCreate", /** @param { import("discord.js").ModalSubmitInte
     }
     else if (i.customId === "runedit") {
         let language = i.fields.getTextInputValue("language").toLowerCase()
-        let code = i.fields.getTextInputValue("code")
+        let code = i.fields.getTextInputValue("code").replace(/`/g, "`\u200b")
         let input = "" || i.fields.getTextInputValue("input")
         let version
         for (let i = 0; i < runtimes.length; i++) {
@@ -670,6 +670,7 @@ client.on("interactionCreate", /** @param { import("discord.js").MessageContextM
         let code = i.targetMessage.content.replace(/```/g, "")
         code = code.replace(/\n/, "")
         code = code.replace(/\n$/, "")
+        code = code.replace(/`/g, "`\u200b")
         let res = await model.runModel(code)
         let language = res[0]?.languageId
         let version
