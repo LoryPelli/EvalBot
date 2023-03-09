@@ -4,7 +4,6 @@ import { createPaste } from "dpaste-ts"
 import languagedetection from "@vscode/vscode-languagedetection"
 import { AutoPoster } from "topgg-autoposter"
 import { Client as _Client } from "statcord.js"
-import Tesseract from "tesseract.js"
 import dotenv from "dotenv"
 dotenv.config()
 const allIntents = new IntentsBitField(3276799)
@@ -678,10 +677,6 @@ client.on("interactionCreate", /** @param { import("discord.js").MessageContextM
         code = code.replace(/\n$/, "")
         code = code.replace(/`/g, "`\u200b")
         await i.deferReply()
-        if (i.targetMessage.attachments.size != 0) {
-            code = await Tesseract.recognize(i.targetMessage.attachments.first().url, "eng")
-            code = JSON.stringify(code.data.text)
-        }
         let res = await model.runModel(code)
         let language = res[0]?.languageId
         let version
