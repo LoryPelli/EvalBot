@@ -669,7 +669,7 @@ client.on("interactionCreate", /** @param { import("discord.js").ModalSubmitInte
 })
 client.on("interactionCreate", /** @param { import("discord.js").MessageContextMenuCommandInteraction } i */ async (i) => {
     if (i.commandName === "Eval") {
-        let code = i.targetMessage.conten
+        let code = i.targetMessage.content
         let isCodeblock = false
         if (code.startsWith("```") && code.endsWith("```"))
             code = code.replace(/```/g, "")
