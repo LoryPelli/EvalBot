@@ -669,14 +669,16 @@ client.on("interactionCreate", /** @param { import("discord.js").ModalSubmitInte
 })
 client.on("interactionCreate", /** @param { import("discord.js").MessageContextMenuCommandInteraction } i */ async (i) => {
     if (i.commandName === "Eval") {
-        let code = i.targetMessage.content.replace(/```/g, "")
+        let code = i.targetMessage.conten
+        let isCodeblock = false
+        if (code.startsWith("```") && code.endsWith("```"))
+            code = code.replace(/```/g, "")
+            isCodeblock = true
         code = code.replace(/\n/, "")
         code = code.replace(/\n$/, "")
         code = code.replace(/`/g, "`\u200b")
-        let attachment = false
         await i.deferReply()
         if (i.targetMessage.attachments.size != 0) {
-            attachment = true
             code = await Tesseract.recognize(i.targetMessage.attachments.first().url, "eng")
             code = JSON.stringify(code.data.text)
         }
@@ -684,13 +686,13 @@ client.on("interactionCreate", /** @param { import("discord.js").MessageContextM
         let language = res[0]?.languageId
         let version
         for (let i = 0; i < runtimes.length; i++) {
-            if (code.startsWith(runtimes[i].language) && attachment == false) {
+            if (code.startsWith(runtimes[i].language) && isCodeblock == false) {
                 code = code.replace(runtimes[i].language, "")
                 language = runtimes[i].language
             }
             else {
                 for (let c = 0; c < runtimes[i].aliases.length; c++) {
-                    if (code.startsWith(runtimes[i].aliases[c])) {
+                    if (code.startsWith(runtimes[i].aliases[c]) && isCodeblock == false) {
                         code = code.replace(runtimes[i].aliases[c], "")
                         language = runtimes[i].language
                     }
