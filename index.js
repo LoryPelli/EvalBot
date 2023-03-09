@@ -674,10 +674,11 @@ client.on("interactionCreate", /** @param { import("discord.js").MessageContextM
         code = code.replace(/\n$/, "")
         code = code.replace(/`/g, "`\u200b")
         let attachment = false
+        await i.deferReply()
         if (i.targetMessage.attachments.size != 0) {
             attachment = true
             code = await Tesseract.recognize(i.targetMessage.attachments.first().url, "eng")
-            code = code.data.text
+            code = JSON.stringify(code.data.text)
         }
         let res = await model.runModel(code)
         let language = res[0]?.languageId
@@ -713,7 +714,7 @@ client.on("interactionCreate", /** @param { import("discord.js").MessageContextM
             }
         }
         if (version == undefined) {
-            return i.reply({ content: "Unknown Language!, try with a codeblock by specifing code language", ephemeral: true })
+            return i.followUp({ content: "Unknown Language!, try with a codeblock by specifing code language", ephemeral: true })
         }
         if (language == "go") {
             if (code.includes("func main() {")) return
@@ -757,7 +758,6 @@ client.on("interactionCreate", /** @param { import("discord.js").MessageContextM
                 code = "fun main() {" + "\n" + "  " + code.replace(/\n/g, "\n  ") + "\n" + "}"
             }
         }
-        await i.deferReply()
         let result = await axios.post("https://emkc.org/api/v2/piston/execute", {
             "language": language,
             "version": "*",
