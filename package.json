@@ -11,8 +11,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@vscode/vscode-languagedetection": "^1.0.22",
     "axios": "^1.3.4",
     "discord.js": "^14.7.1",
-    "dpaste-ts": "^2.0.0"
+    "dotenv": "^16.0.3",
+    "dpaste-ts": "^2.0.0",
+    "statcord.js": "^3.4.3",
+    "tesseract.js": "^4.0.2",
+    "topgg-autoposter": "^2.0.1"
   }
 }
