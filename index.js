@@ -103,6 +103,7 @@ client.on("interactionCreate", /** @param { import("discord.js").ChatInputComman
         if (languageoption.length == 0) {
             let filter = runtimes.slice(0, 25).filter(choice => choice.language.startsWith(languageoption))
             await i.respond(filter.map(choice => ({ name: choice.language, value: choice.language })))
+            return
         }
         let filter = runtimes.filter(choice => choice.language.startsWith(languageoption))
         await i.respond(filter.map(choice => ({ name: choice.language, value: choice.language })))
