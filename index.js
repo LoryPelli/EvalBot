@@ -715,7 +715,7 @@ client.on("interactionCreate", /** @param { import("discord.js").MessageContextM
         let isCodeblock = false
         if (code.startsWith("```") && code.endsWith("```"))
             code = code.replace(/```/g, "")
-        isCodeblock = true
+            isCodeblock = true
         code = code.replace(/\n/, "")
         code = code.replace(/\n$/, "")
         code = code.replace(/`/g, "`\u200b")
