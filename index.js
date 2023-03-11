@@ -47,6 +47,10 @@ client.on("ready", () => {
         description: "Get the bot invite link",
     })
     commands?.create({
+        name: "vote",
+        description: "Vote for the bot on topgg",
+    })
+    commands?.create({
         name: "Eval",
         type: 3
     })
@@ -148,6 +152,15 @@ client.on("interactionCreate", /** @param { import("discord.js").ChatInputComman
             .setURL("https://discord.com/api/oauth2/authorize?client_id=1076200668810985634&permissions=274877975552&scope=applications.commands%20bot")
         let row = new ActionRowBuilder()
             .addComponents(invite)
+        await i.reply({ components: [row], ephemeral: true })
+    }
+    else if (i.commandName === "vote") {
+        let vote = new ButtonBuilder()
+            .setStyle(ButtonStyle.Link)
+            .setLabel("Vote")
+            .setURL("https://top.gg/bot/1076200668810985634/vote")
+        let row = new ActionRowBuilder()
+            .addComponents(vote)
         await i.reply({ components: [row], ephemeral: true })
     }
 })
