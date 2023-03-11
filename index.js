@@ -1,4 +1,4 @@
-import { IntentsBitField, Client, ActivityType, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } from "discord.js"
+import { IntentsBitField, Client, ActivityType, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, ApplicationCommandOptionType } from "discord.js"
 import axios from "axios"
 import { createPaste } from "dpaste-ts"
 import languagedetection from "@vscode/vscode-languagedetection"
@@ -36,7 +36,16 @@ client.on("ready", () => {
     let commands = client.application?.commands
     commands?.create({
         name: "run",
-        description: "Run a code (Piston API)"
+        description: "Run a code (Piston API)",
+        options: [
+            {
+                name: "language",
+                description: "programming language",
+                type: ApplicationCommandOptionType.String,
+                required: true,
+                autocomplete: true,
+            }
+        ]
     })
     commands?.create({
         name: "languages",
@@ -89,7 +98,18 @@ client.on("messageCreate", async (msg) => {
     }
 })
 client.on("interactionCreate", /** @param { import("discord.js").ChatInputCommandInteraction } i */ async (i) => {
+    if (i.isAutocomplete()) {
+        let languageoption = i.options.getFocused().toLowerCase()
+        if (languageoption.length == 0) {
+            let filter = runtimes.slice(0, 25).filter(choice => choice.language.startsWith(languageoption))
+            await i.respond(filter.map(choice => ({ name: choice.language, value: choice.language })))
+        }
+        let filter = runtimes.filter(choice => choice.language.startsWith(languageoption))
+        await i.respond(filter.map(choice => ({ name: choice.language, value: choice.language })))
+        return
+    }
     if (i.commandName === "run") {
+        let languageoption = i.options.getString("language")
         let modal = new ModalBuilder()
             .setCustomId("run")
             .setTitle("Run Code")
@@ -100,6 +120,7 @@ client.on("interactionCreate", /** @param { import("discord.js").ChatInputComman
             .setRequired(true)
             .setMinLength(1)
             .setMaxLength(10)
+            .setValue(languageoption)
         let code = new TextInputBuilder()
             .setCustomId("code")
             .setLabel("Code")
