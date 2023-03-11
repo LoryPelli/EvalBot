@@ -13,14 +13,14 @@ let runcodes = 0
 let runtimes = await axios.get("https://emkc.org/api/v2/piston/runtimes").then(response => Array.from(response.data))
 const poster = AutoPoster(process.env.TOPGG, client)
 poster.on('posted', (stats) => {
-  console.log(`${stats.serverCount} servers | ${stats.shardCount} shards`)
+    console.log(`${stats.serverCount} servers | ${stats.shardCount} shards`)
 })
 const statcord = new _Client({
-  key: process.env.STATCORD,
-  client,
-  postCpuStatistics: true,
-  postMemStatistics: true,
-  postNetworkStatistics: true
+    key: process.env.STATCORD,
+    client,
+    postCpuStatistics: true,
+    postMemStatistics: true,
+    postNetworkStatistics: true
 })
 client.on("ready", () => {
     console.clear()
@@ -110,6 +110,15 @@ client.on("interactionCreate", /** @param { import("discord.js").ChatInputComman
     }
     if (i.commandName === "run") {
         let languageoption = i.options.getString("language")
+        let version
+        for (let i = 0; i < runtimes.length; i++) {
+            if (languageoption == runtimes[i].language) {
+                version = runtimes[i].version
+            }
+        }
+        if (version == undefined) {
+            return i.reply({ content: "Unknown Language!", ephemeral: true })
+        }
         let modal = new ModalBuilder()
             .setCustomId("run")
             .setTitle("Run Code")
@@ -706,7 +715,7 @@ client.on("interactionCreate", /** @param { import("discord.js").MessageContextM
         let isCodeblock = false
         if (code.startsWith("```") && code.endsWith("```"))
             code = code.replace(/```/g, "")
-            isCodeblock = true
+        isCodeblock = true
         code = code.replace(/\n/, "")
         code = code.replace(/\n$/, "")
         code = code.replace(/`/g, "`\u200b")
@@ -768,7 +777,7 @@ client.on("interactionCreate", /** @param { import("discord.js").MessageContextM
         else if (language == "c++") {
             if (code.includes("int main() {")) return
             else {
-                code = "#include <iostream>" + "\n" + "using namespace std;" + "\n" + "int main() {" + "\n" + "  " + code.replace(/\n/g, "\n  ")  + "\n" + "}"
+                code = "#include <iostream>" + "\n" + "using namespace std;" + "\n" + "int main() {" + "\n" + "  " + code.replace(/\n/g, "\n  ") + "\n" + "}"
             }
         }
         else if (language == "csharp.net") {
