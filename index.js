@@ -102,15 +102,15 @@ client.on("interactionCreate", /** @param { import("discord.js").ChatInputComman
         let languageoption = i.options.getFocused().toLowerCase()
         if (languageoption.length == 0) {
             let filter = runtimes.slice(0, 25).filter(choice => choice.language.startsWith(languageoption))
-            await i.respond(filter.map(choice => ({ name: choice.language, value: choice.language })))
+            await i.respond(filter.map(choice => ({ name: `${choice.language} - ${choice.version}`, value: `${choice.language} - ${choice.version}` })))
             return
         }
         let filter = runtimes.filter(choice => choice.language.startsWith(languageoption))
-        await i.respond(filter.map(choice => ({ name: choice.language, value: choice.language })))
+        await i.respond(filter.map(choice => ({ name: `${choice.language} - ${choice.version}`, value: `${choice.language} - ${choice.version}` })))
         return
     }
     if (i.commandName === "run") {
-        let languageoption = i.options.getString("language")
+        let languageoption = i.options.getString("language").split(" - ")[0]
         let version
         for (let i = 0; i < runtimes.length; i++) {
             if (languageoption == runtimes[i].language) {
