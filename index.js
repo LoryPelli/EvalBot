@@ -1,6 +1,11 @@
-import { InteractionResponseFlags, InteractionResponseType, InteractionType, verifyKey } from 'discord-interactions'
-import { INVITE_CMD } from './commands';
+import { InteractionResponseFlags, InteractionResponseType, InteractionType, verifyKey } from "discord-interactions"
+import { INVITE_CMD, VOTE_CMD, LANGS_CMD } from "./commands"
+import fetch from "node-fetch"
 import config from "./config.json" assert { type: "json" }
+let runtimes = await fetch("https://emkc.org/api/v2/piston/runtimes", {
+    method: "GET"
+})
+runtimes = await runtimes.json()
 class JsonResponse extends Response {
     constructor(body, init) {
         const jsonBody = JSON.stringify(body)
@@ -51,6 +56,40 @@ export default {
                                     ]
                                 }
                             ],
+                            flags: InteractionResponseFlags.EPHEMERAL
+                        },
+                    })
+                }
+                case VOTE_CMD.name.toLowerCase(): {
+                    return new JsonResponse({
+                        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+                        data: {
+                            components: [
+                                {
+                                    type: 1,
+                                    components: [
+                                        {
+                                            type: 2,
+                                            label: "Vote",
+                                            style: 5,
+                                            url: "https://top.gg/bot/1076200668810985634/vote"
+                                        }
+                                    ]
+                                }
+                            ],
+                            flags: InteractionResponseFlags.EPHEMERAL
+                        },
+                    })
+                }
+                case LANGS_CMD.name.toLowerCase(): {
+                    let languages = []
+                    for (let c = 0; c < runtimes.length; c++) {
+                        languages.push({ name: `Language: ${runtimes[c].language}`, value: `Version: ${runtimes[c].version}`, inline: true })
+                    }
+                    return new JsonResponse({
+                        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+                        data: {
+                            content: "test",
                             flags: InteractionResponseFlags.EPHEMERAL
                         },
                     })
