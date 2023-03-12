@@ -6,17 +6,21 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm i && node ."
+    "start": "wrangler dev",
+    "ngrok": "ngrok http 8787"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@vscode/vscode-languagedetection": "^1.0.22",
-    "axios": "^1.3.4",
-    "discord.js": "^14.7.1",
-    "dotenv": "^16.0.3",
+    "discord-interactions": "^3.3.0",
     "dpaste-ts": "^2.0.0",
+    "node-fetch": "^3.3.1",
     "statcord.js": "^3.4.3",
     "topgg-autoposter": "^2.0.1"
+  },
+  "devDependencies": {
+    "ngrok": "^4.3.3",
+    "wrangler": "^2.12.2"
   }
 }
