@@ -356,5 +356,24 @@ export default {
                 }
             }
         }
+        else if (message.type === InteractionType.APPLICATION_COMMAND_AUTOCOMPLETE) {
+            let languageoption = message.data.options[0].value
+            if (languageoption.length == 0) {
+                let filter = runtimes.slice(0, 25).filter(choice => choice.language.startsWith(languageoption))
+                return new JsonResponse({
+                    type: InteractionResponseType.APPLICATION_COMMAND_AUTOCOMPLETE_RESULT,
+                    data: {
+                        choices: filter.map(choice => ({ name: `${choice.language} - ${choice.version}`, value: `${choice.language} - ${choice.version}` }))
+                    }
+                })
+            }
+            let filter = runtimes.filter(choice => choice.language.startsWith(languageoption))
+            return new JsonResponse({
+                type: InteractionResponseType.APPLICATION_COMMAND_AUTOCOMPLETE_RESULT,
+                data: {
+                    choices: filter.map(choice => ({ name: `${choice.language} - ${choice.version}`, value: `${choice.language} - ${choice.version}` }))
+                }
+            })
+        }
     }
 }
