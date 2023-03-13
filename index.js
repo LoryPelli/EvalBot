@@ -475,9 +475,78 @@ export default {
                             }
                         })
                     }
-                    return new JsonResponse({
-                        type: InteractionResponseType.DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE
+                    if (language == "go") {
+                        if (code.includes("func main() {")) return
+                        else {
+                            code = "package main" + "\n" + "import \"fmt\"" + "\n" + "func main() {" + "\n" + "  " + code.replace(/\n/g, "\n  ") + "\n" + "}"
+                        }
+                    }
+                    else if (language == "rust") {
+                        if (code.includes("fn main() {")) return
+                        else {
+                            code = "use std::io;" + "\n" + "fn main() {" + "\n" + "  " + code.replace(/\n/g, "\n  ") + "\n" + "}"
+                        }
+                    }
+                    else if (language == "c") {
+                        if (code.includes("int main() {")) return
+                        else {
+                            code = "#include <stdio.h>" + "\n" + "int main() {" + "\n" + "  " + code.replace(/\n/g, "\n  ") + "\n" + "}"
+                        }
+                    }
+                    else if (language == "c++") {
+                        if (code.includes("int main() {")) return
+                        else {
+                            code = "#include <iostream>" + "\n" + "using namespace std;" + "\n" + "int main() {" + "\n" + "  " + code.replace(/\n/g, "\n  ") + "\n" + "}"
+                        }
+                    }
+                    else if (language == "csharp.net") {
+                        if (code.includes("static void Main(string[] args) {")) return
+                        else {
+                            code = "using System;" + "\n" + "class Program {" + "\n" + "  static void Main(string[] args) {" + "\n" + "    " + code.replace(/\n/g, "\n    ") + "\n" + "  }" + "\n" + "}"
+                        }
+                    }
+                    else if (language == "java") {
+                        if (code.includes("public static void Main(string[] args) {")) return
+                        else {
+                            code = "public class Main {" + "\n" + "  public static void main(String[] args) {" + "\n" + "    " + code.replace(/\n/g, "\n    ") + "\n" + "  }" + "\n" + "}"
+                        }
+                    }
+                    else if (language == "kotlin") {
+                        if (code.includes("fun main() {")) return
+                        else {
+                            code = "fun main() {" + "\n" + "  " + code.replace(/\n/g, "\n  ") + "\n" + "}"
+                        }
+                    }
+                    let result = await fetch("https://emkc.org/api/v2/piston/execute", {
+                        method: "POST",
+                        body: JSON.stringify({
+                            "language": language,
+                            "version": "*",
+                            "files": [{
+                                "content": code
+                            }],
+                            "stdin": input,
+                            "args": input.split(",")
+                        })
                     })
+                    result = await result.json()
+                    let runembed = {
+                        title: "Evaluation Result",
+                        fields: [
+                            { name: "Language", value: "```" + "\n" + language + "\n" + "```", inline: false },
+                            { name: "Version", value: "```" + "\n" + version + "\n" + "```", inline: false },
+                            { name: "Input code", value: "```" + language + "\n" + code.slice(0, 925) + "\n" + "```", inline: false },
+                            { name: "Output", value: "```" + language + "\n" + result.run.output.slice(0, 925) + "\n" + "```", inline: false },
+                            { name: "Output code", value: "```" + "\n" + result.run.code + "\n" + "```", inline: false }
+                        ]
+                    }
+                    return new JsonResponse({
+                        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+                        data: {
+                            embeds: [runembed]
+                        }
+                    })
+
                 }
             }
         }
