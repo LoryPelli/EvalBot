@@ -1,5 +1,5 @@
-import { InteractionResponseFlags, InteractionResponseType, InteractionType, verifyKey } from "discord-interactions"
-import { INVITE_CMD, VOTE_CMD, LANGS_CMD } from "./commands"
+import { InteractionResponseFlags, InteractionResponseType, InteractionType, verifyKey, ButtonStyleTypes, TextStyleTypes } from "discord-interactions"
+import { INVITE_CMD, VOTE_CMD, LANGS_CMD, RUN_CMD } from "./commands"
 import fetch from "node-fetch-native"
 import config from "./config.json" assert { type: "json" }
 class JsonResponse extends Response {
@@ -50,7 +50,7 @@ export default {
                                         {
                                             type: 2,
                                             label: "Invite",
-                                            style: 5,
+                                            style: ButtonStyleTypes.LINK,
                                             url: "https://discord.com/api/oauth2/authorize?client_id=1076200668810985634&permissions=274877975552&scope=bot%20applications.commands"
                                         }
                                     ]
@@ -71,7 +71,7 @@ export default {
                                         {
                                             type: 2,
                                             label: "Vote",
-                                            style: 5,
+                                            style: ButtonStyleTypes.LINK,
                                             url: "https://top.gg/bot/1076200668810985634/vote"
                                         }
                                     ]
@@ -103,14 +103,14 @@ export default {
                                         {
                                             type: 2,
                                             label: "Previous",
-                                            style: 1,
+                                            style: ButtonStyleTypes.PRIMARY,
                                             custom_id: "previous1",
                                             disabled: true
                                         },
                                         {
                                             type: 2,
                                             label: "Next",
-                                            style: 1,
+                                            style: ButtonStyleTypes.PRIMARY,
                                             custom_id: "next1"
                                         }
                                     ]
@@ -118,6 +118,74 @@ export default {
                             ],
                             flags: InteractionResponseFlags.EPHEMERAL
                         },
+                    })
+                }
+                case RUN_CMD.name.toLowerCase(): {
+                    let languageoption = message.data.options[0].value.split(" - ")[0]
+                    let version
+                    for (let i = 0; i < runtimes.length; i++) {
+                        if (languageoption == runtimes[i].language) {
+                            version = runtimes[i].version
+                        }
+                    }
+                    if (version == undefined) {
+                        return new JsonResponse({
+                            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+                            data: {
+                                content: "Uknown Language!",
+                                flags: InteractionResponseFlags.EPHEMERAL
+                            },
+                        })
+                    }
+                    return new JsonResponse({
+                        type: InteractionResponseType.MODAL,
+                        data: {
+                            title: "Run Code",
+                            custom_id: "run",
+                            components: [
+                                {
+                                    type: 1,
+                                    components: [
+                                        {
+                                            type: 4,
+                                            label: "Language",
+                                            style: TextStyleTypes.SHORT,
+                                            custom_id: "language",
+                                            required: true,
+                                            min_length: 1,
+                                            max_length: 10,
+                                            value: languageoption
+                                        }
+                                    ]
+                                },
+                                {
+                                    type: 1,
+                                    components: [
+                                        {
+                                            type: 4,
+                                            label: "Code",
+                                            style: TextStyleTypes.PARAGRAPH,
+                                            custom_id: "code",
+                                            required: true,
+                                            min_length: 5
+                                        }
+                                    ]
+                                },
+                                {
+                                    type: 1,
+                                    components: [
+                                        {
+                                            type: 4,
+                                            label: "Input (separate with comma)",
+                                            style: TextStyleTypes.SHORT,
+                                            custom_id: "input",
+                                            required: false,
+                                            placeholder: "(optional)"
+                                        }
+                                    ]
+                                }
+                            ],
+                        }
                     })
                 }
             }
@@ -146,13 +214,13 @@ export default {
                                         {
                                             type: 2,
                                             label: "Previous",
-                                            style: 1,
+                                            style: ButtonStyleTypes.PRIMARY,
                                             custom_id: "previous2"
                                         },
                                         {
                                             type: 2,
                                             label: "Next",
-                                            style: 1,
+                                            style: ButtonStyleTypes.PRIMARY,
                                             custom_id: "next2"
                                         }
                                     ]
@@ -184,13 +252,13 @@ export default {
                                         {
                                             type: 2,
                                             label: "Previous",
-                                            style: 1,
+                                            style: ButtonStyleTypes.PRIMARY,
                                             custom_id: "previous3"
                                         },
                                         {
                                             type: 2,
                                             label: "Next",
-                                            style: 1,
+                                            style: ButtonStyleTypes.PRIMARY,
                                             custom_id: "next3"
                                         }
                                     ]
@@ -222,13 +290,13 @@ export default {
                                         {
                                             type: 2,
                                             label: "Previous",
-                                            style: 1,
+                                            style: ButtonStyleTypes.PRIMARY,
                                             custom_id: "previous4"
                                         },
                                         {
                                             type: 2,
                                             label: "Next",
-                                            style: 1,
+                                            style: ButtonStyleTypes.PRIMARY,
                                             custom_id: "next4",
                                             disabled: true
                                         }
@@ -261,14 +329,14 @@ export default {
                                         {
                                             type: 2,
                                             label: "Previous",
-                                            style: 1,
+                                            style: ButtonStyleTypes.PRIMARY,
                                             custom_id: "previous1",
                                             disabled: true
                                         },
                                         {
                                             type: 2,
                                             label: "Next",
-                                            style: 1,
+                                            style: ButtonStyleTypes.PRIMARY,
                                             custom_id: "next1"
                                         }
                                     ]
@@ -300,13 +368,13 @@ export default {
                                         {
                                             type: 2,
                                             label: "Previous",
-                                            style: 1,
+                                            style: ButtonStyleTypes.PRIMARY,
                                             custom_id: "previous2"
                                         },
                                         {
                                             type: 2,
                                             label: "Next",
-                                            style: 1,
+                                            style: ButtonStyleTypes.PRIMARY,
                                             custom_id: "next2"
                                         }
                                     ]
@@ -338,13 +406,13 @@ export default {
                                         {
                                             type: 2,
                                             label: "Previous",
-                                            style: 1,
+                                            style: ButtonStyleTypes.PRIMARY,
                                             custom_id: "previous3"
                                         },
                                         {
                                             type: 2,
                                             label: "Next",
-                                            style: 1,
+                                            style: ButtonStyleTypes.PRIMARY,
                                             custom_id: "next3"
                                         }
                                     ]
