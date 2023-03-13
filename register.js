@@ -1,5 +1,5 @@
 import { EVAL_APP_MENU, INVITE_CMD, LANGS_CMD, RUN_CMD, VOTE_CMD } from "./commands.js"
-import fetch from 'node-fetch'
+import fetch from 'node-fetch-native'
 import config from "./config.json" assert { type: "json" }
 const token = config.TOKEN
 const applicationId = config.ID
