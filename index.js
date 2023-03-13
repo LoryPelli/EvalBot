@@ -38,8 +38,8 @@ export default {
             })
         }
         else if (message.type === InteractionType.APPLICATION_COMMAND) {
-            switch (message.data.name.toLowerCase()) {
-                case INVITE_CMD.name.toLowerCase(): {
+            switch (message.data.name) {
+                case INVITE_CMD.name: {
                     return new JsonResponse({
                         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
                         data: {
@@ -60,7 +60,7 @@ export default {
                         },
                     })
                 }
-                case VOTE_CMD.name.toLowerCase(): {
+                case VOTE_CMD.name: {
                     return new JsonResponse({
                         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
                         data: {
@@ -81,7 +81,7 @@ export default {
                         },
                     })
                 }
-                case LANGS_CMD.name.toLowerCase(): {
+                case LANGS_CMD.name: {
                     let languages = []
                     for (let c = 0; c < runtimes.length; c++) {
                         languages.push({ name: `Language: ${runtimes[c].language}`, value: `Version: ${runtimes[c].version}`, inline: true })
@@ -120,7 +120,7 @@ export default {
                         },
                     })
                 }
-                case RUN_CMD.name.toLowerCase(): {
+                case RUN_CMD.name: {
                     let languageoption = message.data.options[0].value.split(" - ")[0]
                     let version
                     for (let i = 0; i < runtimes.length; i++) {
