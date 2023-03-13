@@ -443,5 +443,43 @@ export default {
                 }
             })
         }
+        else if (message.type === InteractionType.MODAL_SUBMIT) {
+            switch (message.data.custom_id) {
+                case "run": {
+                    let language = message.data.components[0].components[0].value.toLowerCase()
+                    let code = message.data.components[1].components[0].value.replace(/`/g, "`\u200b")
+                    let input = "" || message.data.components[2].components[0].value
+                    let version
+                    for (let i = 0; i < runtimes.length; i++) {
+                        if (runtimes[i].aliases.length != 0) {
+                            for (let c = 0; c < runtimes[i].aliases.length; c++) {
+                                if (language == runtimes[i].language || language == runtimes[i].aliases[c]) {
+                                    language = runtimes[i].language
+                                    version = runtimes[i].version
+                                }
+                            }
+                        }
+                        else {
+                            if (language == runtimes[i].language) {
+                                language = runtimes[i].language
+                                version = runtimes[i].version
+                            }
+                        }
+                    }
+                    if (version == undefined) {
+                        return new JsonResponse({
+                            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+                            data: {
+                                content: "Unknown Language!",
+                                flags: InteractionResponseFlags.EPHEMERAL
+                            }
+                        })
+                    }
+                    return new JsonResponse({
+                        type: InteractionResponseType.DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE
+                    })
+                }
+            }
+        }
     }
 }
