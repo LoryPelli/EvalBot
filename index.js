@@ -2,10 +2,6 @@ import { InteractionResponseFlags, InteractionResponseType, InteractionType, ver
 import { INVITE_CMD, VOTE_CMD, LANGS_CMD } from "./commands"
 import fetch from "node-fetch-native"
 import config from "./config.json" assert { type: "json" }
-let runtimes = await fetch("https://emkc.org/api/v2/piston/runtimes", {
-    method: "GET"
-})
-runtimes = await runtimes.json()
 class JsonResponse extends Response {
     constructor(body, init) {
         const jsonBody = JSON.stringify(body)
@@ -19,6 +15,10 @@ class JsonResponse extends Response {
 }
 export default {
     async fetch(request) {
+        let runtimes = await fetch("https://emkc.org/api/v2/piston/runtimes", {
+            method: "GET"
+        })
+        runtimes = await runtimes.json()
         const signature = request.headers.get('x-signature-ed25519')
         const timestamp = request.headers.get('x-signature-timestamp')
         const body = await request.clone().arrayBuffer()
